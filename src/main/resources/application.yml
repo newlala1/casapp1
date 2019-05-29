@@ -1,0 +1,13 @@
+
+logging:
+  file: "logs/app1.log"
+info:
+  name : "App1项目"
+
+server:
+  port: 8888
+  context-path: /
+  address: 0.0.0.0
+spring:
+  thymeleaf:
+    cache: false

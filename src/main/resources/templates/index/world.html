@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/layout::header('统一认证演示系统后台界面')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style type="text/css">
+    .tabs-panels{
+        height:500px;
+    }
+</style>
+<body class="easyui-layout">
+<div data-options="region:'north',split:true" style="height: 100px;">
+    <div style="float:left;padding-top:5px;padding-left:8px">
+        统一认证演示系统
+    </div>
+    <div style="float:right;padding-right:20px;padding-top:60px">
+        <span th:text="${attribute.user_name}"></span>（<span th:text="${attribute['userRoleName']}"></span>），欢迎您第<span th:text="${userModel.loginCount}"></span> 次访问本系统，当前时间：<span id="time"></span>
+    </div>
+</div>
+<div data-options="region:'west',split:true" style="width:200px">
+    <div th:if="${#maps.containsKey(attribute,'userRoleName')}">
+        <ul class="easyui-tree">
+        <div th:switch="${attribute['userRoleName']}" th:remove="tag">
+            <div th:case="操作员" th:remove="tag">
+                <li>
+                    <span>消息管理</span>
+                    <ul>
+                        <li>
+                            <span><a href="javascript:addTab('添加消息','')">添加消息</a></span>
+                        </li>
+                        <li>
+                            <span><a href="javascript:addTab('消息管理','')">消息管理</a></span>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <span>分类管理</span>
+                    <ul>
+                        <li>
+                            <span><a href="javascript:addTab('添加分类','')">添加分类</a></span>
+                        </li>
+                        <li>
+                            <span><a href="javascript:addTab('分类管理','')">分类管理</a></span>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <span>产品管理</span>
+                    <ul>
+                        <li><span><a href="javascript:addTab('添加产品','')">添加产品</a></span></li>
+                        <li><span><a href="javascript:addTab('管理产品','')">管理产品</a></span></li>
+                    </ul>
+                </li>
+            </div>
+            <div th:case="审计员" th:remove="tag">
+
+                    <li>
+                        <span>审计管理</span>
+                        <ul>
+                            <li>
+                                <span><a href="javascript:addTab('业务数据审计','')">业务数据审计</a></span>
+                            </li>
+                            <li>
+                                <span><a href="javascript:addTab('系统日志审计','')">系统日志审计</a></span>
+                            </li>
+                        </ul>
+                    </li>
+
+            </div>
+        </div>
+            <li>
+                <span>系统功能</span>
+                <ul>
+                    <li><span><a href="javascript:addTab('当前用户信息','detail')">当前用户信息</a></span></li>
+                    <li><span><a id="btnLogout" href="#">注销</a></span></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<div data-options="region:'center'">
+    <div id="tab" class="easyui-tabs">
+    </div>
+</div>
+<div data-options="region:'south',split:true" style="height: 100px;"></div>
+<iframe id="logoutFrm" style="display:none"></iframe>
+<script th:inline="javascript">
+    var adminName=/*[[${attribute.user_name}]]*/;
+</script>
+<script>
+    function showTime(){
+        $("#time").html(new Date().toLocaleDateString()+ " "+ new Date().toLocaleTimeString());
+    }
+    function showInfo(msg){
+        $.messager.show({
+           title:"提示信息",
+            msg:msg,
+            showType:'slide'
+
+        });
+    }
+    function addTab(title,href){
+        if($("#tab").tabs("exists",title)==true) {
+            $("#tab").tabs("select",title);
+        }
+        else {
+            $("#tab").tabs("add", {
+                title: title,
+                href: href,
+                closable:true
+            });
+        }
+    }
+    $(function(){
+        //时间显示
+       showTime();
+       setInterval("showTime()",1000);
+       //注销
+        $("#btnLogout").click(function(){
+            document.getElementById("logoutFrm").contentWindow.location.href=logoutUrl;
+            setTimeout(function(){location.href="/";},1000);
+        }) ;
+        //提示信息
+        showInfo(adminName+",欢迎登录")
+        //tabs工具栏
+        $("#tab").tabs({
+            tools:[
+                {
+                    iconCls:'icon-clear',
+                    title:'关闭',
+                    handler:function(){
+                        var tabs=$("#tab").tabs("tabs");
+                        var len=tabs.length;
+                        for(var i=0;i<len;i++){
+                            $("#tab").tabs("close",0);
+                        }
+                    }
+                }
+            ]
+        });
+    });
+
+</script>
+</body>
+</html>

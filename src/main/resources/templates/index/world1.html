@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/layout::header('world')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+    <!--layout start-->
+
+    <!--//layout end-->
+    <div class="row">
+        <div th:replace="common/layout::toolbar">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-ms-12" th:each="info: ${attribute}">
+
+                <span class="col-ms-3" th:text="${info.key}"></span>:
+                <span class="col-ms-6" th:text="${#strings.unescapeJavaScript(info.value)}"></span>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

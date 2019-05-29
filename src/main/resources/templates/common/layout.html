@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header(title)">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" th:href="@{/js/easyui/themes/default/easyui.css}">
+    <link rel="stylesheet" th:href="@{/js/easyui/themes/icon.css}">
+    <link rel="stylesheet" th:href="@{/js/easyui/themes/color.css}">
+
+
+    <title th:text="${title}"></title>
+    <script language="JavaScript" th:src="@{/js/easyui/jquery.min.js}"></script>
+    <script language="JavaScript" th:src="@{/js/easyui/jquery.easyui.min.js}"></script>
+
+    <script th:inline="javascript">
+        var logoutUrl=/*[[@{/user/logout}]]*/;
+    </script>
+
+    <script>
+        $(function(){
+           $("#btnLogout").click(function(){
+               document.getElementById("logoutFrm").contentWindow.location.href=logoutUrl;
+               setTimeout(function(){location.href="/";},1000);
+           }) ;
+        });
+    </script>
+
+
+</head>
+<body>
+
+<div class="btn-toolbar" th:fragment="toolbar">
+    <div class="btn-group">
+        <a th:href="@{/admin}" class="btn btn-default" th:if="${#maps.isEmpty(attribute)}">单点登录</a>
+        <button type="button" class="btn btn-default">使用证书获取用户信息</button>
+        <button type="button" id="btnLogout" class="btn btn-default" th:if="${not #maps.isEmpty(attribute)}">退出</button>
+    </div>
+    <iframe id="logoutFrm" style="display:none"></iframe>
+</div>
+
+</body>
+</html>
